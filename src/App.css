@@ -41,6 +41,7 @@
   border: none;
   padding: 0;
   background: transparent;
+  text-decoration: none;
   cursor: pointer;
 }
 
@@ -70,6 +71,7 @@
   padding: 0.4rem 0.72rem;
   font-size: 0.83rem;
   color: var(--ink-muted);
+  text-decoration: none;
   cursor: pointer;
 }
 

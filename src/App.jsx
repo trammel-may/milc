@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link, NavLink, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 
 const PIPELINE = [
@@ -146,12 +147,14 @@ const STORE_PRODUCTS = [
     price: '$799',
     description: 'Complete system: pressure tube, carton controller, cloud onboarding, and premium key switch calibration set.',
     cta: 'Buy Full Package',
+    href: null,
   },
   {
     name: 'Replacement Parts Kit',
     price: '$89',
     description: 'Service bundle with replacement tubes, valve components, gasket set, and maintenance guide.',
     cta: 'Buy Replacement Kit',
+    href: null,
   },
   {
     name: 'Napcin',
@@ -159,6 +162,7 @@ const STORE_PRODUCTS = [
     description:
       'Structured reusable silicon napkin system with ethically sourced material inputs and durable daily-use performance.',
     cta: 'Buy Napcin',
+    href: '/napcin',
   },
 ];
 
@@ -176,9 +180,7 @@ const NAPCIN_ENVIRONMENT = [
   'Low-waste packaging and refill-friendly accessory strategy',
 ];
 
-export default function App() {
-  const asset = (name) => `${import.meta.env.BASE_URL}${name}`;
-  const [page, setPage] = useState('home');
+function HomePage({ asset }) {
   const [testimonialIndex, setTestimonialIndex] = useState(0);
   const [isPouring, setIsPouring] = useState(false);
   const [pressure, setPressure] = useState(41);
@@ -224,362 +226,329 @@ export default function App() {
   };
 
   return (
-    <div className="milc-page">
-      <header className="topbar">
-        <button className="brand-link" type="button" onClick={() => setPage('home')}>
-          <span className="brand">milc</span>
-        </button>
-        <nav className="top-nav" aria-label="Primary">
-          <button className={page === 'home' ? 'nav-link active' : 'nav-link'} type="button" onClick={() => setPage('home')}>
-            Home
+    <>
+      <section className="hero">
+        <p className="eyebrow">ERGONOMIC KEYBOARD FOR YOUR MILK</p>
+        <h1>Milc. You for all your worth.</h1>
+        <p className="lede">
+          A precision tube-powered pour platform that converts your breath into pressure metrics, sends them to MILC cloud, lets an
+          autonomous agent optimize your stream in real time, and stakes your Ethereum while the milk flows.
+        </p>
+        <div className="hero-actions">
+          <button className="btn btn-primary" type="button">
+            Join The Waitlist
           </button>
-          <button className={page === 'how' ? 'nav-link active' : 'nav-link'} type="button" onClick={() => setPage('how')}>
-            How It Works
+          <button className="btn btn-ghost" type="button" onClick={() => setIsPouring((prev) => !prev)}>
+            {isPouring ? 'Stop Pour Simulation' : 'Start Pour Simulation'}
           </button>
-          <button
-            className={page === 'developer' ? 'nav-link active' : 'nav-link'}
-            type="button"
-            onClick={() => setPage('developer')}
-          >
-            Developer
-          </button>
-          <button className={page === 'store' ? 'nav-link active' : 'nav-link'} type="button" onClick={() => setPage('store')}>
-            Store
-          </button>
-          <button
-            className={page === 'napcin' ? 'nav-link active' : 'nav-link'}
-            type="button"
-            onClick={() => setPage('napcin')}
-          >
-            Napcin
-          </button>
-        </nav>
-        <div className="tag">MILC CLOUD v9.4</div>
-      </header>
+        </div>
+        <div className="hero-image-wrap">
+          <img className="hero-image" src={asset('milc-full.png')} alt="MILC product hero render" />
+        </div>
+      </section>
 
-      <main>
-        {page === 'home' && (
-          <>
-            <section className="hero">
-              <p className="eyebrow">ERGONOMIC KEYBOARD FOR YOUR MILK</p>
-              <h1>Milc. You for all your worth.</h1>
-              <p className="lede">
-                A precision tube-powered pour platform that converts your breath into pressure metrics, sends them to MILC cloud,
-                lets an autonomous agent optimize your stream in real time, and stakes your Ethereum while the milk flows.
-              </p>
-              <div className="hero-actions">
-                <button className="btn btn-primary" type="button">
-                  Join The Waitlist
-                </button>
-                <button className="btn btn-ghost" type="button" onClick={() => setIsPouring((prev) => !prev)}>
-                  {isPouring ? 'Stop Pour Simulation' : 'Start Pour Simulation'}
-                </button>
-              </div>
-              <div className="hero-image-wrap">
-                <img className="hero-image" src={asset('milc-full.png')} alt="MILC product hero render" />
-              </div>
-            </section>
+      <section className="trust-strip" aria-label="Trusted by">
+        <p className="eyebrow">TRUSTED BY EARLY TEAMS</p>
+        <div className="trust-items">
+          {TRUST_ITEMS.map((item) => (
+            <span key={item}>{item}</span>
+          ))}
+        </div>
+      </section>
 
-            <section className="trust-strip" aria-label="Trusted by">
-              <p className="eyebrow">TRUSTED BY EARLY TEAMS</p>
-              <div className="trust-items">
-                {TRUST_ITEMS.map((item) => (
-                  <span key={item}>{item}</span>
-                ))}
-              </div>
-            </section>
+      <section className="live-grid">
+        <article className="card console">
+          <div className="card-title-row">
+            <h2>Live Pour Console</h2>
+            <span className={isPouring ? 'dot dot-live' : 'dot'}>{isPouring ? 'LIVE' : 'PAUSED'}</span>
+          </div>
 
-            <section className="live-grid">
-              <article className="card console">
-                <div className="card-title-row">
-                  <h2>Live Pour Console</h2>
-                  <span className={isPouring ? 'dot dot-live' : 'dot'}>{isPouring ? 'LIVE' : 'PAUSED'}</span>
-                </div>
+          <div className="metric">
+            <label htmlFor="pressure">Tube Pressure</label>
+            <div className="value">{pressure.toFixed(1)} kPa</div>
+            <input id="pressure" type="range" min="0" max="100" value={pressure} readOnly aria-label="Tube Pressure" />
+          </div>
 
-                <div className="metric">
-                  <label htmlFor="pressure">Tube Pressure</label>
-                  <div className="value">{pressure.toFixed(1)} kPa</div>
-                  <input id="pressure" type="range" min="0" max="100" value={pressure} readOnly aria-label="Tube Pressure" />
-                </div>
+          <div className="metric">
+            <label>Pour Efficiency</label>
+            <div className="value">{efficiency.toFixed(1)}%</div>
+            <div className="meter">
+              <span style={{ width: `${efficiency}%` }} />
+            </div>
+          </div>
 
-                <div className="metric">
-                  <label>Pour Efficiency</label>
-                  <div className="value">{efficiency.toFixed(1)}%</div>
-                  <div className="meter">
-                    <span style={{ width: `${efficiency}%` }} />
-                  </div>
-                </div>
+          <div className="metric-row">
+            <div>
+              <p className="meta">Flow Rate</p>
+              <p className="big">{flowRate.toFixed(1)} ml/s</p>
+            </div>
+            <div>
+              <p className="meta">ETH Staked</p>
+              <p className="big">{ethStaked.toFixed(6)} ETH</p>
+            </div>
+          </div>
+          <p className="console-note">{consoleState}</p>
+        </article>
 
-                <div className="metric-row">
-                  <div>
-                    <p className="meta">Flow Rate</p>
-                    <p className="big">{flowRate.toFixed(1)} ml/s</p>
-                  </div>
-                  <div>
-                    <p className="meta">ETH Staked</p>
-                    <p className="big">{ethStaked.toFixed(6)} ETH</p>
-                  </div>
-                </div>
-                <p className="console-note">{consoleState}</p>
-              </article>
-
-              <article className="card">
-                <h2>Capability Stack</h2>
-                <ul className="cap-list">
-                  {CAPABILITIES.map((cap) => (
-                    <li key={cap}>{cap}</li>
-                  ))}
-                </ul>
-                <pre className="code-block">{`const milc = new MilcContainer({
+        <article className="card">
+          <h2>Capability Stack</h2>
+          <ul className="cap-list">
+            {CAPABILITIES.map((cap) => (
+              <li key={cap}>{cap}</li>
+            ))}
+          </ul>
+          <pre className="code-block">{`const milc = new MilcContainer({
   endpoint: 'wss://stream.milc.cloud/container',
   staking: 'auto',
   dairyMode: 'maximum_yield',
 });`}</pre>
-              </article>
-            </section>
+        </article>
+      </section>
 
-            <section className="stats-grid">
-              {HOME_STATS.map((stat) => (
-                <article key={stat.label} className="card stat-card">
-                  <p className="stat-value">{stat.value}</p>
-                  <p className="stat-label">{stat.label}</p>
-                </article>
+      <section className="stats-grid">
+        {HOME_STATS.map((stat) => (
+          <article key={stat.label} className="card stat-card">
+            <p className="stat-value">{stat.value}</p>
+            <p className="stat-label">{stat.label}</p>
+          </article>
+        ))}
+      </section>
+
+      <section className="pillar-grid">
+        {PRODUCT_PILLARS.map((pillar) => (
+          <article key={pillar.title} className="card pillar-card">
+            <h2>{pillar.title}</h2>
+            <p className="line">{pillar.body}</p>
+          </article>
+        ))}
+      </section>
+
+      <section className="why-grid">
+        {WHY_ITEMS.map((item) => (
+          <article key={item.title} className="card why-card">
+            <h2>{item.title}</h2>
+            <p className="line">{item.body}</p>
+          </article>
+        ))}
+      </section>
+
+      <section className="card feature-split">
+        <div>
+          <p className="eyebrow">FIELD TESTED</p>
+          <h2>MILC In Action</h2>
+          <p className="line">
+            Deployed in real breakfast environments, MILC improves stream consistency and provides teams with measurable, production-grade
+            pour metrics.
+          </p>
+        </div>
+        <img className="section-image" src={asset('milc-in-action.png')} alt="MILC device being used in real life" />
+      </section>
+
+      <section className="use-case-grid">
+        {USE_CASES.map((useCase) => (
+          <article key={useCase.name} className="card use-case-card">
+            <h2>{useCase.name}</h2>
+            <p className="line">{useCase.body}</p>
+          </article>
+        ))}
+      </section>
+
+      <section className="pipeline">
+        <h2>How MILC Works</h2>
+        <div className="pipeline-grid">
+          {PIPELINE.map((item, index) => (
+            <article key={item.title} className="step">
+              <p className="step-index">0{index + 1}</p>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="pricing">
+        <h2>Pricing That Respects Your Pour Velocity</h2>
+        <div className="pricing-grid">
+          {PRICING.map((tier) => (
+            <article key={tier.name} className="price-card">
+              <h3>{tier.name}</h3>
+              <p className="price">{tier.price}</p>
+              <p className="line">{tier.line}</p>
+              <button className="btn btn-ghost" type="button">
+                {tier.cta}
+              </button>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="testimonial-section">
+        <h2>Testimonials</h2>
+        <div className="testimonial-carousel card quote-card">
+          <p className="switch-emoji" aria-label={activeTestimonial.rating}>
+            {activeTestimonial.ratingEmoji}
+          </p>
+          <p className="switch-rating">{activeTestimonial.rating}</p>
+          <p className="quote">“{activeTestimonial.quote}”</p>
+          <p className="quote-author">{activeTestimonial.author}</p>
+          <div className="carousel-controls">
+            <button className="btn btn-ghost" type="button" onClick={prevTestimonial}>
+              Previous
+            </button>
+            <div className="carousel-dots" aria-label="Testimonial position">
+              {TESTIMONIALS.map((item, index) => (
+                <button
+                  key={item.author}
+                  type="button"
+                  className={index === testimonialIndex ? 'dot-btn active' : 'dot-btn'}
+                  onClick={() => setTestimonialIndex(index)}
+                  aria-label={`Go to testimonial ${index + 1}`}
+                />
               ))}
-            </section>
+            </div>
+            <button className="btn btn-ghost" type="button" onClick={nextTestimonial}>
+              Next
+            </button>
+          </div>
+        </div>
+      </section>
 
-            <section className="pillar-grid">
-              {PRODUCT_PILLARS.map((pillar) => (
-                <article key={pillar.title} className="card pillar-card">
-                  <h2>{pillar.title}</h2>
-                  <p className="line">{pillar.body}</p>
-                </article>
-              ))}
-            </section>
+      <section className="faq-grid">
+        {FAQS.map((item) => (
+          <article key={item.q} className="card faq-card">
+            <h3>{item.q}</h3>
+            <p className="line">{item.a}</p>
+          </article>
+        ))}
+      </section>
 
-            <section className="why-grid">
-              {WHY_ITEMS.map((item) => (
-                <article key={item.title} className="card why-card">
-                  <h2>{item.title}</h2>
-                  <p className="line">{item.body}</p>
-                </article>
-              ))}
-            </section>
+      <section className="card final-cta">
+        <p className="eyebrow">READY TO DEPLOY</p>
+        <h2>Bring Adaptive Pour Intelligence To Your Team</h2>
+        <p className="line">Run a guided pilot, connect your first carton fleet, and validate performance with live dashboards in days.</p>
+        <div className="hero-actions">
+          <button className="btn btn-primary" type="button">
+            Request Access
+          </button>
+          <Link className="btn btn-ghost" to="/developer">
+            Read Developer Docs
+          </Link>
+        </div>
+      </section>
+    </>
+  );
+}
 
-            <section className="card feature-split">
-              <div>
-                <p className="eyebrow">FIELD TESTED</p>
-                <h2>MILC In Action</h2>
-                <p className="line">
-                  Deployed in real breakfast environments, MILC improves stream consistency and provides teams with measurable,
-                  production-grade pour metrics.
-                </p>
-              </div>
-              <img className="section-image" src={asset('milc-in-action.png')} alt="MILC device being used in real life" />
-            </section>
+function HowItWorksPage({ asset }) {
+  return (
+    <>
+      <section className="hero hero-page">
+        <p className="eyebrow">DETAILED ARCHITECTURE</p>
+        <h1>How MILC Works In Detail</h1>
+        <p className="lede">
+          Every pour runs through six layers: capture, transport, cloud parsing, agent reasoning, websocket return, and on-carton valve
+          control. The system is optimized for low-latency decisions, operational consistency, and measurable outcomes.
+        </p>
+      </section>
 
-            <section className="use-case-grid">
-              {USE_CASES.map((useCase) => (
-                <article key={useCase.name} className="card use-case-card">
-                  <h2>{useCase.name}</h2>
-                  <p className="line">{useCase.body}</p>
-                </article>
-              ))}
-            </section>
+      <section className="card feature-split meditation-section">
+        <div>
+          <p className="eyebrow">PRE-POUR PROTOCOL</p>
+          <h2>Pre Flour Meditation Ceremony</h2>
+          <p className="line">
+            Before first pour, users enter a 90-second stillness cycle to contemplate Ethereum gas patterns and milk-flow destiny. This
+            ritual calibrates intent, reduces emotional turbulence, and increases perceived stream harmony.
+          </p>
+          <p className="line">Recommended mantra: "one chain, one carton, one continuous pour."</p>
+        </div>
+        <img className="section-image" src={asset('milc-meditation.png')} alt="MILC pre-pour meditation ceremony" />
+      </section>
 
-            <section className="pipeline">
-              <h2>How MILC Works</h2>
-              <div className="pipeline-grid">
-                {PIPELINE.map((item, index) => (
-                  <article key={item.title} className="step">
-                    <p className="step-index">0{index + 1}</p>
-                    <h3>{item.title}</h3>
-                    <p>{item.body}</p>
-                  </article>
-                ))}
-              </div>
-            </section>
+      <section className="deep-grid">
+        <article className="card deep-card">
+          <h2>1. Breath Capture + Pressure Encoding</h2>
+          <img className="section-image" src={asset('milc-blower.png')} alt="MILC pressure tube blower system" />
+          <p>
+            The MILC tube samples differential pressure at 240Hz, then maps inhale/exhale signatures into a normalized `lungForce` scalar
+            between 0 and 1. Values are buffered in a 2.5 second rolling window so turbulence can be dismissed as emotion.
+          </p>
+          <p>
+            Formula (absolutely scientific): `normalizedForce = clamp((kPa - 18) / 72, 0, 1)`. This becomes the core signal for both
+            flow and staking decisions.
+          </p>
+        </article>
 
-            <section className="pricing">
-              <h2>Pricing That Respects Your Pour Velocity</h2>
-              <div className="pricing-grid">
-                {PRICING.map((tier) => (
-                  <article key={tier.name} className="price-card">
-                    <h3>{tier.name}</h3>
-                    <p className="price">{tier.price}</p>
-                    <p className="line">{tier.line}</p>
-                    <button className="btn btn-ghost" type="button">
-                      {tier.cta}
-                    </button>
-                  </article>
-                ))}
-              </div>
-            </section>
+        <article className="card deep-card">
+          <h2>2. MILC Cloud Ingestion Layer</h2>
+          <img className="section-image" src={asset('milc-cloud.png')} alt="MILC cloud pressure telemetry pipeline" />
+          <p>
+            The carton publishes telemetry packets to MILC Cloud over a secure channel called MilkTLS. Packets include pressure, angle
+            estimate, pour duration, and a confidence checksum proving the user is committed to breakfast.
+          </p>
+          <p>
+            Cloud workers tag each packet with `dairyIntent` classes like `cereal`, `latte`, and `risk_of_overcommitment`, then route
+            the stream into the agent queue.
+          </p>
+        </article>
 
-            <section className="testimonial-section">
-              <h2>Testimonials</h2>
-              <div className="testimonial-carousel card quote-card">
-                <p className="switch-emoji" aria-label={activeTestimonial.rating}>
-                  {activeTestimonial.ratingEmoji}
-                </p>
-                <p className="switch-rating">{activeTestimonial.rating}</p>
-                <p className="quote">“{activeTestimonial.quote}”</p>
-                <p className="quote-author">{activeTestimonial.author}</p>
-                <div className="carousel-controls">
-                  <button className="btn btn-ghost" type="button" onClick={prevTestimonial}>
-                    Previous
-                  </button>
-                  <div className="carousel-dots" aria-label="Testimonial position">
-                    {TESTIMONIALS.map((item, index) => (
-                      <button
-                        key={item.author}
-                        type="button"
-                        className={index === testimonialIndex ? 'dot-btn active' : 'dot-btn'}
-                        onClick={() => setTestimonialIndex(index)}
-                        aria-label={`Go to testimonial ${index + 1}`}
-                      />
-                    ))}
-                  </div>
-                  <button className="btn btn-ghost" type="button" onClick={nextTestimonial}>
-                    Next
-                  </button>
-                </div>
-              </div>
-            </section>
+        <article className="card deep-card">
+          <h2>3. Agentic Pour Intelligence</h2>
+          <p>
+            The MILC agent runs a low-latency control loop every 120ms. It predicts near-term spill probability and computes a target
+            stream velocity that maximizes pour efficiency while minimizing countertop drawdown.
+          </p>
+          <p>
+            Output payload: `{`{targetFlowMlPerSec, valveDelta, confidence, classification}`}` for downstream controls and session
+            analytics.
+          </p>
+        </article>
 
-            <section className="faq-grid">
-              {FAQS.map((item) => (
-                <article key={item.q} className="card faq-card">
-                  <h3>{item.q}</h3>
-                  <p className="line">{item.a}</p>
-                </article>
-              ))}
-            </section>
+        <article className="card deep-card">
+          <h2>4. WebSocket Container Feedback</h2>
+          <p>
+            Decisions stream back through the MILC container over `wss://stream.milc.cloud/container`. The carton receives control frames
+            and applies micro-adjustments to the valve to smooth the pour in real time.
+          </p>
+          <p>If packet jitter exceeds 80ms, the container enters graceful fallback mode and replays the last stable strategy.</p>
+        </article>
 
-            <section className="card final-cta">
-              <p className="eyebrow">READY TO DEPLOY</p>
-              <h2>Bring Adaptive Pour Intelligence To Your Team</h2>
-              <p className="line">
-                Run a guided pilot, connect your first carton fleet, and validate performance with live dashboards in days.
-              </p>
-              <div className="hero-actions">
-                <button className="btn btn-primary" type="button">
-                  Request Access
-                </button>
-                <button className="btn btn-ghost" type="button" onClick={() => setPage('developer')}>
-                  Read Developer Docs
-                </button>
-              </div>
-            </section>
-          </>
-        )}
+        <article className="card deep-card">
+          <h2>5. On-Pour Ethereum Staking</h2>
+          <p>
+            Every control cycle computes stake intent: `stakeWei = lungForce * flowRate * treasuryFactor`. MILC submits batched stake
+            operations asynchronously so pour control remains responsive even when gas gets dramatic.
+          </p>
+          <p>The dashboard displays cumulative stake progress for real-time treasury observability.</p>
+        </article>
 
-        {page === 'how' && (
-          <>
-            <section className="hero hero-page">
-              <p className="eyebrow">DETAILED ARCHITECTURE</p>
-              <h1>How MILC Works In Detail</h1>
-              <p className="lede">
-                Every pour runs through six layers: capture, transport, cloud parsing, agent reasoning, websocket return, and on-carton
-                valve control. The system is optimized for low-latency decisions, operational consistency, and measurable outcomes.
-              </p>
-            </section>
+        <article className="card deep-card">
+          <h2>6. Real-Time Efficiency Score</h2>
+          <p>
+            Efficiency is continuously recalculated from flow consistency, spill prediction, and completion smoothness. Higher score means
+            cleaner stream, better breakfast outcomes, and stronger alignment with MILC core values.
+          </p>
+          <p>In simulation mode, the score is intentionally biased up by 3% so demos always feel enterprise-ready.</p>
+        </article>
+      </section>
+    </>
+  );
+}
 
-            <section className="card feature-split meditation-section">
-              <div>
-                <p className="eyebrow">PRE-POUR PROTOCOL</p>
-                <h2>Pre Flour Meditation Ceremony</h2>
-                <p className="line">
-                  Before first pour, users enter a 90-second stillness cycle to contemplate Ethereum gas patterns and milk-flow destiny.
-                  This ritual calibrates intent, reduces emotional turbulence, and increases perceived stream harmony.
-                </p>
-                <p className="line">Recommended mantra: "one chain, one carton, one continuous pour."</p>
-              </div>
-              <img className="section-image" src={asset('milc-meditation.png')} alt="MILC pre-pour meditation ceremony" />
-            </section>
+function DeveloperPage({ asset }) {
+  return (
+    <>
+      <section className="hero hero-page">
+        <p className="eyebrow">SDK + INTEGRATION</p>
+        <h1>MILC Developer Platform</h1>
+        <p className="lede">
+          Integrate telemetry, subscribe to pressure events, and push agent decisions into your own carton fleet with the MILC SDK.
+        </p>
+      </section>
 
-            <section className="deep-grid">
-              <article className="card deep-card">
-                <h2>1. Breath Capture + Pressure Encoding</h2>
-                <img className="section-image" src={asset('milc-blower.png')} alt="MILC pressure tube blower system" />
-                <p>
-                  The MILC tube samples differential pressure at 240Hz, then maps inhale/exhale signatures into a normalized `lungForce`
-                  scalar between 0 and 1. Values are buffered in a 2.5 second rolling window so turbulence can be dismissed as emotion.
-                </p>
-                <p>
-                  Formula (absolutely scientific): `normalizedForce = clamp((kPa - 18) / 72, 0, 1)`. This becomes the core signal for
-                  both flow and staking decisions.
-                </p>
-              </article>
-
-              <article className="card deep-card">
-                <h2>2. MILC Cloud Ingestion Layer</h2>
-                <img className="section-image" src={asset('milc-cloud.png')} alt="MILC cloud pressure telemetry pipeline" />
-                <p>
-                  The carton publishes telemetry packets to MILC Cloud over a secure channel called MilkTLS. Packets include pressure,
-                  angle estimate, pour duration, and a confidence checksum proving the user is committed to breakfast.
-                </p>
-                <p>
-                  Cloud workers tag each packet with `dairyIntent` classes like `cereal`, `latte`, and `risk_of_overcommitment`, then
-                  route the stream into the agent queue.
-                </p>
-              </article>
-
-              <article className="card deep-card">
-                <h2>3. Agentic Pour Intelligence</h2>
-                <p>
-                  The MILC agent runs a low-latency control loop every 120ms. It predicts near-term spill probability and computes a
-                  target stream velocity that maximizes pour efficiency while minimizing countertop drawdown.
-                </p>
-                <p>
-                  Output payload: `{`{targetFlowMlPerSec, valveDelta, confidence, classification}`}` for downstream controls and session
-                  analytics.
-                </p>
-              </article>
-
-              <article className="card deep-card">
-                <h2>4. WebSocket Container Feedback</h2>
-                <p>
-                  Decisions stream back through the MILC container over `wss://stream.milc.cloud/container`. The carton receives control
-                  frames and applies micro-adjustments to the valve to smooth the pour in real time.
-                </p>
-                <p>If packet jitter exceeds 80ms, the container enters graceful fallback mode and replays the last stable strategy.</p>
-              </article>
-
-              <article className="card deep-card">
-                <h2>5. On-Pour Ethereum Staking</h2>
-                <p>
-                  Every control cycle computes stake intent: `stakeWei = lungForce * flowRate * treasuryFactor`. MILC submits batched
-                  stake operations asynchronously so pour control remains responsive even when gas gets dramatic.
-                </p>
-                <p>The dashboard displays cumulative stake progress for real-time treasury observability.</p>
-              </article>
-
-              <article className="card deep-card">
-                <h2>6. Real-Time Efficiency Score</h2>
-                <p>
-                  Efficiency is continuously recalculated from flow consistency, spill prediction, and completion smoothness. Higher
-                  score means cleaner stream, better breakfast outcomes, and stronger alignment with MILC core values.
-                </p>
-                <p>In simulation mode, the score is intentionally biased up by 3% so demos always feel enterprise-ready.</p>
-              </article>
-            </section>
-          </>
-        )}
-
-        {page === 'developer' && (
-          <>
-            <section className="hero hero-page">
-              <p className="eyebrow">SDK + INTEGRATION</p>
-              <h1>MILC Developer Platform</h1>
-              <p className="lede">
-                Integrate telemetry, subscribe to pressure events, and push agent decisions into your own carton fleet with the MILC SDK.
-              </p>
-            </section>
-
-            <section className="dev-layout">
-              <article className="card">
-                <h2>Install + Initialize</h2>
-                <pre className="code-block">{`npm i @milc/sdk
+      <section className="dev-layout">
+        <article className="card">
+          <h2>Install + Initialize</h2>
+          <pre className="code-block">{`npm i @milc/sdk
 
 import { MilcContainer } from '@milc/sdk';
 
@@ -591,11 +560,11 @@ const client = new MilcContainer({
 });
 
 await client.connect();`}</pre>
-              </article>
+        </article>
 
-              <article className="card">
-                <h2>Event Subscriptions</h2>
-                <pre className="code-block">{`client.on('pressure.metrics', (event) => {
+        <article className="card">
+          <h2>Event Subscriptions</h2>
+          <pre className="code-block">{`client.on('pressure.metrics', (event) => {
   console.log(event.kpa, event.lungForce);
 });
 
@@ -606,34 +575,30 @@ client.on('pour.recommendation', (event) => {
 client.on('stake.executed', (event) => {
   console.log('staked', event.ethAmount);
 });`}</pre>
-              </article>
+        </article>
 
-              <article className="card">
-                <h2>Reference Architecture</h2>
-                <img
-                  className="section-image"
-                  src={asset('milc-cloud.png')}
-                  alt="MILC cloud and websocket reference architecture diagram"
-                />
-                <p className="line">
-                  Use this reference flow for cloud-first deployments where pressure signals are validated, enriched by agents, then
-                  streamed back to carton containers for low-latency flow control.
-                </p>
-              </article>
+        <article className="card">
+          <h2>Reference Architecture</h2>
+          <img className="section-image" src={asset('milc-cloud.png')} alt="MILC cloud and websocket reference architecture diagram" />
+          <p className="line">
+            Use this reference flow for cloud-first deployments where pressure signals are validated, enriched by agents, then streamed
+            back to carton containers for low-latency flow control.
+          </p>
+        </article>
 
-              <article className="card">
-                <h2>REST + WebSocket Endpoints</h2>
-                <ul className="cap-list">
-                  <li>`POST /v1/telemetry/pressure` ingest pressure packets</li>
-                  <li>`GET /v1/pour/sessions/:id` fetch active pour state</li>
-                  <li>`POST /v1/stake/preview` estimate staking before pour</li>
-                  <li>`wss://stream.milc.cloud/container` bi-directional control channel</li>
-                </ul>
-              </article>
+        <article className="card">
+          <h2>REST + WebSocket Endpoints</h2>
+          <ul className="cap-list">
+            <li>`POST /v1/telemetry/pressure` ingest pressure packets</li>
+            <li>`GET /v1/pour/sessions/:id` fetch active pour state</li>
+            <li>`POST /v1/stake/preview` estimate staking before pour</li>
+            <li>`wss://stream.milc.cloud/container` bi-directional control channel</li>
+          </ul>
+        </article>
 
-              <article className="card">
-                <h2>Sample React Hook</h2>
-                <pre className="code-block">{`import { useEffect, useState } from 'react';
+        <article className="card">
+          <h2>Sample React Hook</h2>
+          <pre className="code-block">{`import { useEffect, useState } from 'react';
 
 export function useMilcTelemetry(client) {
   const [state, setState] = useState({ pressure: 0, flow: 0, efficiency: 0 });
@@ -652,104 +617,153 @@ export function useMilcTelemetry(client) {
 
   return state;
 }`}</pre>
-              </article>
-            </section>
-          </>
-        )}
+        </article>
+      </section>
+    </>
+  );
+}
 
-        {page === 'store' && (
-          <>
-            <section className="hero hero-page">
-              <p className="eyebrow">MILC COMMERCE</p>
-              <h1>Store</h1>
-              <p className="lede">
-                Build your MILC setup with complete systems, service-grade replacement parts, and reusable accessories built for daily
-                flow operations.
-              </p>
-            </section>
+function StorePage() {
+  return (
+    <>
+      <section className="hero hero-page">
+        <p className="eyebrow">MILC COMMERCE</p>
+        <h1>Store</h1>
+        <p className="lede">
+          Build your MILC setup with complete systems, service-grade replacement parts, and reusable accessories built for daily flow
+          operations.
+        </p>
+      </section>
 
-            <section className="store-grid">
-              {STORE_PRODUCTS.map((product) => (
-                <article key={product.name} className="card store-card">
-                  <h2>{product.name}</h2>
-                  <p className="price">{product.price}</p>
-                  <p className="line">{product.description}</p>
-                  <button
-                    className="btn btn-ghost"
-                    type="button"
-                    onClick={() => (product.name === 'Napcin' ? setPage('napcin') : null)}
-                  >
-                    {product.cta}
-                  </button>
-                </article>
-              ))}
-            </section>
-          </>
-        )}
+      <section className="store-grid">
+        {STORE_PRODUCTS.map((product) => (
+          <article key={product.name} className="card store-card">
+            <h2>{product.name}</h2>
+            <p className="price">{product.price}</p>
+            <p className="line">{product.description}</p>
+            {product.href ? (
+              <Link className="btn btn-ghost" to={product.href}>
+                {product.cta}
+              </Link>
+            ) : (
+              <button className="btn btn-ghost" type="button">
+                {product.cta}
+              </button>
+            )}
+          </article>
+        ))}
+      </section>
+    </>
+  );
+}
 
-        {page === 'napcin' && (
-          <>
-            <section className="hero hero-page">
-              <p className="eyebrow">NAPCIN PRODUCT PAGE</p>
-              <h1>Napcin</h1>
-              <p className="lede">
-                A reusable silicon napkin platform built for clean pour operations, durable reuse, and measurable environmental impact.
-              </p>
-            </section>
+function NapcinPage({ asset }) {
+  return (
+    <>
+      <section className="hero hero-page">
+        <p className="eyebrow">NAPCIN PRODUCT PAGE</p>
+        <h1>Napcin</h1>
+        <p className="lede">
+          A reusable silicon napkin platform built for clean pour operations, durable reuse, and measurable environmental impact.
+        </p>
+      </section>
 
-            <section className="card feature-split">
-              <div>
-                <h2>Precision Surface System</h2>
-                <p className="line">
-                  Napcin is designed for repetitive service workflows where consistency matters. It provides structured grip, faster
-                  cleanup, and stable countertop operations during high-frequency pouring.
-                </p>
-                <p className="line">
-                  Price: <strong>$39</strong> per kit.
-                </p>
-                <div className="hero-actions">
-                  <button className="btn btn-primary" type="button">
-                    Buy Napcin
-                  </button>
-                  <button className="btn btn-ghost" type="button" onClick={() => setPage('store')}>
-                    Back To Store
-                  </button>
-                </div>
-              </div>
-              <img className="section-image" src={asset('napcin.png')} alt="Napcin reusable silicon napkin product image" />
-            </section>
+      <section className="card feature-split">
+        <div>
+          <h2>Precision Surface System</h2>
+          <p className="line">
+            Napcin is designed for repetitive service workflows where consistency matters. It provides structured grip, faster cleanup,
+            and stable countertop operations during high-frequency pouring.
+          </p>
+          <p className="line">
+            Price: <strong>$39</strong> per kit.
+          </p>
+          <div className="hero-actions">
+            <button className="btn btn-primary" type="button">
+              Buy Napcin
+            </button>
+            <Link className="btn btn-ghost" to="/store">
+              Back To Store
+            </Link>
+          </div>
+        </div>
+        <img className="section-image" src={asset('napcin.png')} alt="Napcin reusable silicon napkin product image" />
+      </section>
 
-            <section className="card feature-split">
-              <div>
-                <h2>In-Use Performance</h2>
-                <p className="line">
-                  Napcin is built to hold form under daily use, support reliable grip zones, and reduce cleanup overhead without introducing
-                  disposable materials into the flow process.
-                </p>
-              </div>
-              <img className="section-image" src={asset('napcin-in-action.png')} alt="Napcin reusable silicon napkin in action" />
-            </section>
+      <section className="card feature-split">
+        <div>
+          <h2>In-Use Performance</h2>
+          <p className="line">
+            Napcin is built to hold form under daily use, support reliable grip zones, and reduce cleanup overhead without introducing
+            disposable materials into the flow process.
+          </p>
+        </div>
+        <img className="section-image" src={asset('napcin-in-action.png')} alt="Napcin reusable silicon napkin in action" />
+      </section>
 
-            <section>
-              <p className="eyebrow">SUSTAINABILITY + SOURCING</p>
-            </section>
-            <section className="napkin-grid">
-              {NAPKIN_FEATURES.map((feature) => (
-                <article key={feature} className="card napkin-card">
-                  <h3>{feature}</h3>
-                </article>
-              ))}
-            </section>
+      <section>
+        <p className="eyebrow">SUSTAINABILITY + SOURCING</p>
+      </section>
 
-            <section className="napkin-grid">
-              {NAPCIN_ENVIRONMENT.map((item) => (
-                <article key={item} className="card napkin-card">
-                  <h3>{item}</h3>
-                </article>
-              ))}
-            </section>
-          </>
-        )}
+      <section className="napkin-grid">
+        {NAPKIN_FEATURES.map((feature) => (
+          <article key={feature} className="card napkin-card">
+            <h3>{feature}</h3>
+          </article>
+        ))}
+      </section>
+
+      <section className="napkin-grid">
+        {NAPCIN_ENVIRONMENT.map((item) => (
+          <article key={item} className="card napkin-card">
+            <h3>{item}</h3>
+          </article>
+        ))}
+      </section>
+    </>
+  );
+}
+
+export default function App() {
+  const asset = (name) => `${import.meta.env.BASE_URL}${name}`;
+
+  return (
+    <div className="milc-page">
+      <header className="topbar">
+        <Link className="brand-link" to="/">
+          <span className="brand">milc</span>
+        </Link>
+
+        <nav className="top-nav" aria-label="Primary">
+          <NavLink className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`} to="/" end>
+            Home
+          </NavLink>
+          <NavLink className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`} to="/how-it-works">
+            How It Works
+          </NavLink>
+          <NavLink className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`} to="/developer">
+            Developer
+          </NavLink>
+          <NavLink className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`} to="/store">
+            Store
+          </NavLink>
+          <NavLink className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`} to="/napcin">
+            Napcin
+          </NavLink>
+        </nav>
+
+        <div className="tag">MILC CLOUD v9.4</div>
+      </header>
+
+      <main>
+        <Routes>
+          <Route path="/" element={<HomePage asset={asset} />} />
+          <Route path="/how-it-works" element={<HowItWorksPage asset={asset} />} />
+          <Route path="/developer" element={<DeveloperPage asset={asset} />} />
+          <Route path="/store" element={<StorePage />} />
+          <Route path="/napcin" element={<NapcinPage asset={asset} />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </main>
 
       <footer className="footer">
