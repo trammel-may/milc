@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  --ink: #172320;
+  --ink-muted: #4f605c;
+  --line: #bfd1cc;
+  --accent: #0e917f;
+  --paper: #f6f4ee;
+  --heading-font: 'Space Grotesk', 'Avenir Next', sans-serif;
+  --body-font: 'Space Grotesk', 'Avenir Next', sans-serif;
+  --mono-font: 'IBM Plex Mono', 'SFMono-Regular', monospace;
+
+  font-family: var(--body-font);
+  color: var(--ink);
+  background: var(--paper);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(circle at 18% 8%, rgba(255, 211, 120, 0.28), transparent 36%),
+    radial-gradient(circle at 83% 28%, rgba(85, 187, 169, 0.24), transparent 40%),
+    var(--paper);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--heading-font);
+}
