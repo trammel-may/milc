@@ -56,6 +56,7 @@
   display: flex;
   align-items: center;
   gap: 0.3rem;
+  flex-wrap: wrap;
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 0.22rem;
@@ -185,6 +186,27 @@ h1 {
   display: grid;
   grid-template-columns: 1.3fr 1fr;
   gap: 1rem;
+}
+
+.trust-strip {
+  margin-bottom: 1rem;
+}
+
+.trust-items {
+  margin-top: 0.6rem;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.trust-items span {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.82rem;
+  text-align: center;
+  color: var(--ink-muted);
+  background: rgba(255, 255, 255, 0.52);
 }
 
 .card {
@@ -354,6 +376,153 @@ h1 {
   gap: 0.9rem;
 }
 
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.stat-card {
+  padding: 0.9rem;
+}
+
+.stat-value {
+  margin: 0;
+  font-family: var(--mono-font);
+  font-size: 1.4rem;
+}
+
+.stat-label {
+  margin: 0.35rem 0 0;
+  font-size: 0.84rem;
+  color: var(--ink-muted);
+}
+
+.pillar-grid,
+.why-grid,
+.use-case-grid,
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.pillar-card h2,
+.why-card h2,
+.use-case-card h2 {
+  margin: 0 0 0.55rem;
+}
+
+.store-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.store-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.store-card .btn {
+  margin-top: auto;
+}
+
+.napkin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+
+.napkin-card h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.testimonial-section h2 {
+  margin: 0 0 0.85rem;
+}
+
+.testimonial-carousel {
+  padding: 1.1rem;
+}
+
+.quote-card {
+  background: linear-gradient(170deg, rgba(255, 255, 255, 0.88), rgba(243, 250, 248, 0.84));
+}
+
+.switch-emoji {
+  margin: 0 0 0.45rem;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.switch-rating {
+  margin: 0 0 0.55rem;
+  font-family: var(--mono-font);
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  color: #0f7465;
+}
+
+.quote {
+  margin: 0 0 0.65rem;
+  font-size: 1.03rem;
+  line-height: 1.48;
+  color: #21302c;
+}
+
+.quote-author {
+  margin: 0;
+  font-size: 0.84rem;
+  color: var(--ink-muted);
+  font-family: var(--mono-font);
+}
+
+.carousel-controls {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.carousel-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.dot-btn {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  cursor: pointer;
+  padding: 0;
+}
+
+.dot-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.faq-card h3 {
+  margin: 0 0 0.55rem;
+  font-size: 0.96rem;
+}
+
+.final-cta {
+  text-align: left;
+  padding: 1.2rem;
+}
+
+.final-cta h2 {
+  margin-bottom: 0.55rem;
+}
+
 .pipeline h2,
 .pricing h2 {
   margin: 0 0 0.85rem;
@@ -438,6 +607,14 @@ h1 {
 
 @media (max-width: 980px) {
   .live-grid,
+  .stats-grid,
+  .pillar-grid,
+  .why-grid,
+  .use-case-grid,
+  .faq-grid,
+  .store-grid,
+  .napkin-grid,
+  .trust-items,
   .feature-split,
   .deep-grid,
   .dev-layout,
@@ -473,11 +650,24 @@ h1 {
 
   .live-grid,
   .metric-row,
+  .stats-grid,
+  .pillar-grid,
+  .why-grid,
+  .use-case-grid,
+  .faq-grid,
+  .store-grid,
+  .napkin-grid,
+  .trust-items,
   .feature-split,
   .deep-grid,
   .dev-layout,
   .pipeline-grid,
   .pricing-grid {
     grid-template-columns: 1fr;
+  }
+
+  .carousel-controls {
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }
